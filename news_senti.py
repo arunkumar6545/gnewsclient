@@ -9,7 +9,8 @@ import pprint
 
 warnings.filterwarnings('ignore')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-
+f = open("JPMorgan.csv", "w")
+f.write("polarity, subjectivity, date, url \n")
 sia = SentimentIntensityAnalyzer()
 date_sentiments = {}
 
@@ -36,14 +37,16 @@ for i in range(1,11):
         blob = TextBlob(passage)
 
         # for sentence in blob.sentences:
-        print(date + ",\"" + url + "\"," + str(blob.sentiment.polarity) + "," + str(blob.sentiment.subjectivity))
+        f.write(str(blob.sentiment.polarity) + "," + str(blob.sentiment.subjectivity) + "," + date + ",\"" + url + "\"\n")
         sentiment = sia.polarity_scores(passage)['compound']
         date_sentiments.setdefault(date,[]).append(sentiment)
-
-date_sentment = {}
-for k,v in date_sentiments.items():
-    date_sentment[datetime.strptime(k, '%d %b %Y'). date() + timedelta(days=1)] = round(sum(v)/float(len(v)), 3)
-
-earliest_date = min(date_sentment.keys())
+#
+# date_sentment = {}
+# for k,v in date_sentiments.items():
+#     date_sentment[datetime.strptime(k, '%d %b %Y'). date() + timedelta(days=1)] = round(sum(v)/float(len(v)), 3)
+#
+# earliest_date = min(date_sentment.keys())
+f.close()
+print('done')
 
 # print(date_sentment)
