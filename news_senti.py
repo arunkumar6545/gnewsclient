@@ -9,13 +9,13 @@ import pprint
 
 warnings.filterwarnings('ignore')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-f = open("amazon.csv", "w")
+f = open("goldmansachs.csv", "w")
 f.write("polarity, subjectivity, date, url \n")
 sia = SentimentIntensityAnalyzer()
 date_sentiments = {}
 
 for i in range(1,11):
-    page = urlopen('https://www.businesstimes.com.sg/search/amazon?page='+str(i)).read()
+    page = urlopen('https://www.businesstimes.com.sg/search/goldman%20sachs?page='+str(i)).read()
     soup = BeautifulSoup(page, features="html.parser")
     posts = soup.findAll("div", {"class":"media-body"})
     for post in posts:
