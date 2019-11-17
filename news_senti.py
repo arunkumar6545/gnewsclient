@@ -7,10 +7,12 @@ from datetime import datetime, timedelta
 import time
 import pprint
 
+from textblob.en.sentiments import NaiveBayesAnalyzer
+
 warnings.filterwarnings('ignore')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 f = open("goldmansachs.csv", "w")
-f.write("polarity, subjectivity, date, url \n")
+f.write("polarity, subjectivity, positive, negative, date, url \n")
 sia = SentimentIntensityAnalyzer()
 date_sentiments = {}
 
@@ -35,8 +37,12 @@ for i in range(1,11):
             passage += sentence.text
         blob = TextBlob(passage)
 
+        sent = TextBlob(passage, analyzer=NaiveBayesAnalyzer())
+        positive = sent.sentiment.p_pos
+        negative = sent.sentiment.p_neg
+
         # for sentence in blob.sentences:
-        f.write(str(blob.sentiment.polarity) + "," + str(blob.sentiment.subjectivity) + "," + date + ",\"" + url + "\"\n")
+        f.write(str(blob.sentiment.polarity) + "," + str(blob.sentiment.subjectivity) +  "," + str(positive) + "," + str(negative) + "," + date + ",\"" + url + "\"\n")
         sentiment = sia.polarity_scores(passage)['compound']
         date_sentiments.setdefault(date,[]).append(sentiment)
 #
